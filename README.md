@@ -25,9 +25,9 @@ git clone git@github.com:Trane9991/ansible-ossec-agent-deploy-ossim.git
 10.10.10.12
 ```
 
-* Run playbook with
+* Run playbook with replaced <server ip> and <your user>
 ```
-/usr/share/alienvault/api_core/bin/ansible-playbook -i hosts ossec-agent.yml --ask-pass --ask-sudo-pass
+/usr/share/alienvault/api_core/bin/ansible-playbook -i hosts ossec-agent.yml --extra-vars="server_ip=<server ip>" --user=<your user> --ask-pass --ask-sudo-pass
 ```
 
 Hosts will be added like "host-1", "host-2"
