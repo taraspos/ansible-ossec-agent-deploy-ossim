@@ -41,7 +41,7 @@
 
 - name: remove server keys
   file:
-   path: '/var/ossec/etc/client.keys'
+   path: '/tmp/client.keys'
    state: 'absent'
 
 - name: start ossec
