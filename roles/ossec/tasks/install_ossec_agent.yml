@@ -16,7 +16,7 @@
    creates=/tmp/ossec-hids-2.8.2
 
 - name: copy preloaded_vars.conf
-  copy:
+  templates:
    src: 'preloaded_vars.conf'
    dest: '/tmp/ossec-hids-2.8.2/etc/preloaded-vars.conf'
 
