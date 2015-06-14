@@ -1,0 +1,3 @@
+---
+- include: add_agent.yml
+- include: install_ossec_agent.yml

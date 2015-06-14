@@ -1,0 +1,11 @@
+---
+- name: generate template which will add agent to ossec
+  template:
+    src: 'add_agent'
+    dest: '/var/ossec/add_agent'
+  connection: 'local'
+
+- name: add agents from template to ossec server
+  shell: >
+    /var/ossec/bin/manage_agents -f /add_agent
+  connection: 'local'

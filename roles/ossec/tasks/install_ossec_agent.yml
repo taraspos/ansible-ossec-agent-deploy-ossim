@@ -1,0 +1,51 @@
+- name: download ossec_agent source code
+  get_url:
+    url: 'https://github.com/ossec/ossec-hids/archive/2.8.2.tar.gz'
+    dest: '/tmp'
+
+#- name: unarchive ossec
+# unarchive:
+#     src: '/tmp/2.8.2.tar.gz'
+#     dest: '/tmp/ossec'
+#     copy: 'no'
+
+- name: Unarchive downloaded
+  shell: >
+   chdir='/tmp'
+   tar xvf 2.8.2.tar.gz
+   creates=/tmp/ossec-hids-2.8.2
+
+- name: copy preloaded_vars.conf
+  copy:
+   src: 'preloaded_vars.conf'
+   dest: '/tmp/ossec-hids-2.8.2/etc/preloaded-vars.conf'
+
+- name: install.sh
+  shell: >
+   chdir='/tmp/ossec-hids-2.8.2'
+   bash ./install.sh
+   creates=/var/ossec/etc/ossec.conf
+  sudo: yes
+
+- name: client_keys from server to agent
+  copy:
+   src: '/var/ossec/etc/client.keys'
+   dest: '/tmp/client.keys'
+  register: keys
+
+- shell: >
+     grep "{{ansible_default_ipv4.address}}" /tmp/client.keys  > /var/ossec/etc/client.keys
+  sudo: yes
+  when: keys.changed
+  notify: restart ossec
+
+- name: remove server keys
+  file:
+   path: '/var/ossec/etc/client.keys'
+   state: 'absent'
+
+- name: start ossec
+  service:
+    name: 'ossec'
+    state: 'started'
+  sudo: yes
